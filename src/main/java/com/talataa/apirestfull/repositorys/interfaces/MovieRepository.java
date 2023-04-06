@@ -10,8 +10,10 @@ import java.util.Optional;
 
 @Repository
 public interface MovieRepository {
-    /*
-    List<Movie> findAll();
-    */
+
+    List<Object> findAll(Integer page);
+
+    List<Object> findAll();
+
     Movie findById(Integer id);
 }

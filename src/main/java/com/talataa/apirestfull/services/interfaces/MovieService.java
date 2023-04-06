@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public interface MovieService {
 
-    /*
-    List<Movie> getMovies();
-    */
+
+    List<Object> getMovies(Integer page);
+
     Movie getDetailsMovie(Integer id);
 
 }

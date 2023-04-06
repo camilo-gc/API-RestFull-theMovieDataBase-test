@@ -7,11 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,22 +20,26 @@ public class MovieController {
     @Autowired
     private MovieService movieService;
 
-/*
-    @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Movie>> getMovies(){
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getMovies(@RequestParam(name = "page", defaultValue = "1", required = false) int page){
 
-        List<Movie> listMovies = movieService.getMovies();
+        List<Object> listMovies = movieService.getMovies(page);
 
-        return new ResponseEntity<>(listMovies, HttpStatus.OK);
+        if(listMovies.isEmpty()){
+            return new ResponseEntity<>(new MovieResponse("404", "Not Found", listMovies), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(new MovieResponse("200", "OK", listMovies), HttpStatus.OK);
 
     }
-*/
+
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getDetailsMovie(@PathVariable("id") Integer id){
 
-        Movie movie = movieService.getDetailsMovie(id);
+        List<Object> movie = new ArrayList<>();
+        movie.add(movieService.getDetailsMovie(id));
 
-        if(movie == null){
+        if(movie.isEmpty()){
 
             return new ResponseEntity<>(new MovieResponse("404", "Not Found", movie), HttpStatus.NOT_FOUND);
 

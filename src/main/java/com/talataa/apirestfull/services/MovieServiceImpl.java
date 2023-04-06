@@ -16,15 +16,15 @@ public class MovieServiceImpl implements MovieService {
     @Autowired
     MovieRepository movieRepository;
 
-    /*
-    public List<Movie> getMovies(){
-        System.err.println("getMovies");
-        List<Movie> listMovies = movieRepository.findAll().stream().limit(20).collect(Collectors.toList());
+
+    public List<Object> getMovies(Integer page){
+
+        List<Object> listMovies = movieRepository.findAll(page);
 
         return listMovies;
 
     }
-    */
+
     public Movie getDetailsMovie(Integer id){
 
         return movieRepository.findById(id);

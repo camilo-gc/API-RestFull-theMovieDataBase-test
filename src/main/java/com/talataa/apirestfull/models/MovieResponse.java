@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -13,6 +15,6 @@ public class MovieResponse {
 
     private String statusCode;
     private String description;
-    private Object content;
+    private List<Object> content;
 
 }
