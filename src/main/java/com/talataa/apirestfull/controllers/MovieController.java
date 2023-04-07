@@ -70,8 +70,8 @@ public class MovieController {
     }
 
 
-    @PostMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> setRatedMovie(@RequestBody RatingRequest ratingRequest, @PathVariable("id") Integer id) throws NoSuchFieldException {
+    @PostMapping(value = "/rated/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> setRatedMovie(@RequestBody RatingRequest ratingRequest, @PathVariable("id") Integer id) {
 
         ResponseEntity response = movieService.setRatedMovie(ratingRequest, id);
 
@@ -104,12 +104,21 @@ public class MovieController {
 
     }
 
-    @DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/rated/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> deleteRatedMovie(@PathVariable("id") Integer id){
-        System.err.println("Eliminando por id... " + id);
-        //personaService.eliminar(id);
 
-        return new ResponseEntity<>("Eliminado", HttpStatus.OK);
+        ResponseEntity response = movieService.deleteRatedMovie(id);
+
+        List content = new ArrayList<>();
+        content.add(response.getBody());
+
+        if(!response.getStatusCode().is2xxSuccessful()){
+
+            return new ResponseEntity<>(new apiResponse("403", "Forbidden", content), HttpStatus.FORBIDDEN);
+
+        }
+
+        return new ResponseEntity<>(new apiResponse("200", "OK", content), HttpStatus.OK);
     }
 
 

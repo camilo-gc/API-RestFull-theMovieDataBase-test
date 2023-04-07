@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.HttpClientErrorException;
@@ -67,7 +68,6 @@ public class MovieRepositoryImpl implements MovieRepository{
         }
 
         return movies;
-
     }
 
 
@@ -83,7 +83,6 @@ public class MovieRepositoryImpl implements MovieRepository{
         for (int i = 1; i <= 100; i++) {
 
             String url = String.format("%s/discover/movie?api_key=%s&page=%d", apiUrl, apiKey, i);
-            System.err.println("URL: " + url);
 
             try {
 
@@ -103,28 +102,27 @@ public class MovieRepositoryImpl implements MovieRepository{
         }
 
         return listMovies;
-
     }
 
 
     public Movie findById(Integer id){
 
-        Movie movie = null;
         String url = String.format("%s/movie/%d?api_key=%s", apiUrl, id, apiKey);
 
         try {
 
-            movie =  restTemplate.getForEntity(url, Movie.class).getBody();
+            return restTemplate.getForEntity(url, Movie.class).getBody();
 
         }catch (HttpClientErrorException e) {
+
             System.err.println(e.getMessage());
+            return null;
         }
 
-        return movie;
     }
 
 
-    public ResponseEntity ratedMovie(RatingRequest ratingRequest, Integer id){
+    public ResponseEntity sendRated(RatingRequest ratingRequest, Integer id){
 
         String url = String.format("%s/movie/%d/rating?api_key=%s&guest_session_id=%s", apiUrl, id, apiKey, guestSessionId);
 
@@ -143,28 +141,39 @@ public class MovieRepositoryImpl implements MovieRepository{
 
     public List<Object> findAllRateds(Integer page){
 
-        List<Object> movies = new ArrayList<>();
         String url = String.format("%s/guest_session/%s/rated/movies?api_key=%s&page=%d", apiUrl, guestSessionId, apiKey, page);
-        System.err.println("URL RATEDMOVIES: " + url);
+
         try {
 
             ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
             JSONObject json = new JSONObject(response.getBody());
             JSONArray resultsArray = json.getJSONArray("results");
 
-            movies = resultsArray.toList();
-
-            System.err.println(movies.toString());
+            return resultsArray.toList();
 
         } catch (HttpClientErrorException e) {
 
             System.err.println(e.getMessage());
-
+            return new ArrayList<>();
         }
 
-        return movies;
 
     }
 
+
+    public ResponseEntity deleteRated(Integer id){
+
+        String url = String.format("%s/movie/%d/rating?api_key=%s&guest_session_id=%s", apiUrl, id, apiKey, guestSessionId);
+
+        try {
+
+            return restTemplate.exchange(url, HttpMethod.DELETE, null, Object.class);
+
+        }catch (HttpClientErrorException e) {
+
+            return new ResponseEntity<>("", e.getStatusCode());
+
+        }
+    }
 
 }

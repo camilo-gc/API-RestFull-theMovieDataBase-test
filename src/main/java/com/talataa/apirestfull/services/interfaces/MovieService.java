@@ -22,4 +22,5 @@ public interface MovieService {
 
     List<Object> getRatedMovies(Integer page);
 
+    ResponseEntity deleteRatedMovie(Integer id);
 }

@@ -10,14 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class MovieServiceImpl implements MovieService {
 
     @Autowired
     MovieRepository movieRepository;
+
 
     public List<Object> getMovies(Integer page){
 
@@ -27,27 +26,32 @@ public class MovieServiceImpl implements MovieService {
 
     }
 
+
     public Movie getDetailsMovie(Integer id){
 
         return movieRepository.findById(id);
 
     }
 
+
     public GuestSessionResponse getSession(){
         return movieRepository.getGuestSessionId();
     }
 
+
     public ResponseEntity setRatedMovie(RatingRequest ratingRequest, Integer id) {
-        System.err.println("service");
-        return movieRepository.ratedMovie(ratingRequest, id);
+        return movieRepository.sendRated(ratingRequest, id);
+    }
+
+
+    public List<Object> getRatedMovies(Integer page){
+        List<Object> listMovies = movieRepository.findAllRateds(page);
+        return listMovies;
 
     }
 
-    public List<Object> getRatedMovies(Integer page){
 
-        List<Object> listMovies = movieRepository.findAllRateds(page);
-
-        return listMovies;
-
+    public ResponseEntity deleteRatedMovie(Integer id) {
+        return movieRepository.deleteRated(id);
     }
 }
