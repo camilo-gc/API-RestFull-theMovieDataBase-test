@@ -5,16 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class MovieResponse {
+public class GuestSessionResponse {
 
-    private String statusCode;
-    private String description;
-    private List<Object> content;
+
+    Boolean success;
+    String guest_session_id;
+    String expires_at;
+
+
 
 }

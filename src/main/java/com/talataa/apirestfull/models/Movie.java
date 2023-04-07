@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class Movie {
 
 
-    boolean adult;
+    Boolean adult;
     String backdrop_path;
     Object belongs_to_collection;
     Integer budget;
@@ -35,7 +35,7 @@ public class Movie {
     String status;
     String tagline;
     String title;
-    boolean video;
+    Boolean video;
     Number  vote_average;
     Integer vote_count;
 

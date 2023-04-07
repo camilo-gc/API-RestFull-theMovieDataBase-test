@@ -1,9 +1,12 @@
 package com.talataa.apirestfull.repositorys;
 
+import com.talataa.apirestfull.models.GuestSessionResponse;
 import com.talataa.apirestfull.models.Movie;
+import com.talataa.apirestfull.models.RatingRequest;
 import com.talataa.apirestfull.repositorys.interfaces.MovieRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
@@ -22,11 +25,22 @@ public class MovieRepositoryImpl implements MovieRepository{
     @Value("${tmdb.api.url}")
     private String apiUrl;
 
+    private String guestSessionId;
+
+    @Autowired
     private RestTemplate restTemplate;
 
-    public MovieRepositoryImpl() {
-        this.restTemplate = new RestTemplate();
+
+    public GuestSessionResponse getGuestSessionId(){
+
+        String url = String.format("%s/authentication/guest_session/new?api_key=%s", apiUrl, apiKey);
+
+        GuestSessionResponse guestSessionResponse = restTemplate.getForObject(url, GuestSessionResponse.class);
+        guestSessionId = guestSessionResponse.getGuest_session_id();
+
+        return guestSessionResponse;
     }
+
 
     /**
      *
@@ -55,6 +69,7 @@ public class MovieRepositoryImpl implements MovieRepository{
         return movies;
 
     }
+
 
     /**
      *
@@ -107,5 +122,49 @@ public class MovieRepositoryImpl implements MovieRepository{
 
         return movie;
     }
+
+
+    public ResponseEntity ratedMovie(RatingRequest ratingRequest, Integer id){
+
+        String url = String.format("%s/movie/%d/rating?api_key=%s&guest_session_id=%s", apiUrl, id, apiKey, guestSessionId);
+
+        try {
+
+            return restTemplate.postForEntity(url, ratingRequest, Object.class);
+
+        }catch (HttpClientErrorException e) {
+
+            return new ResponseEntity<>("", e.getStatusCode());
+
+        }
+
+    }
+
+
+    public List<Object> findAllRateds(Integer page){
+
+        List<Object> movies = new ArrayList<>();
+        String url = String.format("%s/guest_session/%s/rated/movies?api_key=%s&page=%d", apiUrl, guestSessionId, apiKey, page);
+        System.err.println("URL RATEDMOVIES: " + url);
+        try {
+
+            ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+            JSONObject json = new JSONObject(response.getBody());
+            JSONArray resultsArray = json.getJSONArray("results");
+
+            movies = resultsArray.toList();
+
+            System.err.println(movies.toString());
+
+        } catch (HttpClientErrorException e) {
+
+            System.err.println(e.getMessage());
+
+        }
+
+        return movies;
+
+    }
+
 
 }
