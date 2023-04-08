@@ -1,14 +1,11 @@
 package com.talataa.apirestfull.repositorys.interfaces;
 
-import com.talataa.apirestfull.models.GuestSessionResponse;
 import com.talataa.apirestfull.models.Movie;
-import com.talataa.apirestfull.models.RatingRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+
 public interface MovieRepository {
 
     List<Object> findAll(Integer page);
@@ -20,15 +17,12 @@ public interface MovieRepository {
     Movie findById(Integer id);
 
 
-    GuestSessionResponse getGuestSessionId();
+    ResponseEntity sendRated(Object ratingRequest, Integer id, String guestSessionId);
 
 
-    ResponseEntity sendRated(RatingRequest ratingRequest, Integer id);
+    List<Object> findAllRatings(String guestSessionId, Integer page);
 
 
-    List<Object> findAllRateds(Integer page);
-
-
-    ResponseEntity deleteRated(Integer id);
+    ResponseEntity deleteRated(Integer id, String guestSessionId);
 
 }

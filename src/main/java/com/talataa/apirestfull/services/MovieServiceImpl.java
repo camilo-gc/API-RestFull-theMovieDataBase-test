@@ -1,8 +1,6 @@
 package com.talataa.apirestfull.services;
 
-import com.talataa.apirestfull.models.GuestSessionResponse;
 import com.talataa.apirestfull.models.Movie;
-import com.talataa.apirestfull.models.RatingRequest;
 import com.talataa.apirestfull.repositorys.interfaces.MovieRepository;
 import com.talataa.apirestfull.services.interfaces.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,40 +16,27 @@ public class MovieServiceImpl implements MovieService {
     MovieRepository movieRepository;
 
 
-    public List<Object> getMovies(Integer page){
-
-        List<Object> listMovies = movieRepository.findAll(page);
-
-        return listMovies;
-
+    public List<Object> getAll(Integer page){
+        return movieRepository.findAll(page);
     }
 
 
-    public Movie getDetailsMovie(Integer id){
-
+    public Movie getDetails(Integer id){
         return movieRepository.findById(id);
-
     }
 
 
-    public GuestSessionResponse getSession(){
-        return movieRepository.getGuestSessionId();
+    public ResponseEntity setRated(Object request, Integer id, String guestSessionId) {
+        return movieRepository.sendRated(request, id, guestSessionId);
     }
 
 
-    public ResponseEntity setRatedMovie(RatingRequest ratingRequest, Integer id) {
-        return movieRepository.sendRated(ratingRequest, id);
+    public List<Object> getRatings(String guestSessionId, Integer page){
+        return movieRepository.findAllRatings(guestSessionId, page);
     }
 
 
-    public List<Object> getRatedMovies(Integer page){
-        List<Object> listMovies = movieRepository.findAllRateds(page);
-        return listMovies;
-
-    }
-
-
-    public ResponseEntity deleteRatedMovie(Integer id) {
-        return movieRepository.deleteRated(id);
+    public ResponseEntity deleteRated(Integer id, String guestSessionId) {
+        return movieRepository.deleteRated(id, guestSessionId);
     }
 }

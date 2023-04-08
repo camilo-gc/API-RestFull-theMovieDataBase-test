@@ -1,10 +1,7 @@
 package com.talataa.apirestfull.services.interfaces;
 
-import com.talataa.apirestfull.models.GuestSessionResponse;
 import com.talataa.apirestfull.models.Movie;
-import com.talataa.apirestfull.models.RatingRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -12,15 +9,17 @@ import java.util.List;
 public interface MovieService {
 
 
-    List<Object> getMovies(Integer page);
+    List<Object> getAll(Integer page);
 
-    Movie getDetailsMovie(Integer id);
 
-    GuestSessionResponse getSession();
+    Movie getDetails(Integer id);
 
-    ResponseEntity setRatedMovie(RatingRequest ratingRequest, Integer id);
 
-    List<Object> getRatedMovies(Integer page);
+    ResponseEntity setRated(Object ratingRequest, Integer id, String guestSessionId);
 
-    ResponseEntity deleteRatedMovie(Integer id);
+
+    List<Object> getRatings(String guestSessionId, Integer page);
+
+
+    ResponseEntity deleteRated(Integer id, String guestSessionId);
 }

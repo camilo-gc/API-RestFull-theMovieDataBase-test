@@ -1,8 +1,6 @@
 package com.talataa.apirestfull.repositorys;
 
-import com.talataa.apirestfull.models.GuestSessionResponse;
 import com.talataa.apirestfull.models.Movie;
-import com.talataa.apirestfull.models.RatingRequest;
 import com.talataa.apirestfull.repositorys.interfaces.MovieRepository;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -26,21 +24,8 @@ public class MovieRepositoryImpl implements MovieRepository{
     @Value("${tmdb.api.url}")
     private String apiUrl;
 
-    private String guestSessionId;
-
     @Autowired
     private RestTemplate restTemplate;
-
-
-    public GuestSessionResponse getGuestSessionId(){
-
-        String url = String.format("%s/authentication/guest_session/new?api_key=%s", apiUrl, apiKey);
-
-        GuestSessionResponse guestSessionResponse = restTemplate.getForObject(url, GuestSessionResponse.class);
-        guestSessionId = guestSessionResponse.getGuest_session_id();
-
-        return guestSessionResponse;
-    }
 
 
     /**
@@ -118,11 +103,10 @@ public class MovieRepositoryImpl implements MovieRepository{
             System.err.println(e.getMessage());
             return null;
         }
-
     }
 
 
-    public ResponseEntity sendRated(RatingRequest ratingRequest, Integer id){
+    public ResponseEntity sendRated(Object ratingRequest, Integer id, String guestSessionId){
 
         String url = String.format("%s/movie/%d/rating?api_key=%s&guest_session_id=%s", apiUrl, id, apiKey, guestSessionId);
 
@@ -135,11 +119,10 @@ public class MovieRepositoryImpl implements MovieRepository{
             return new ResponseEntity<>("", e.getStatusCode());
 
         }
-
     }
 
 
-    public List<Object> findAllRateds(Integer page){
+    public List<Object> findAllRatings(String guestSessionId, Integer page){
 
         String url = String.format("%s/guest_session/%s/rated/movies?api_key=%s&page=%d", apiUrl, guestSessionId, apiKey, page);
 
@@ -156,12 +139,10 @@ public class MovieRepositoryImpl implements MovieRepository{
             System.err.println(e.getMessage());
             return new ArrayList<>();
         }
-
-
     }
 
 
-    public ResponseEntity deleteRated(Integer id){
+    public ResponseEntity deleteRated(Integer id, String guestSessionId){
 
         String url = String.format("%s/movie/%d/rating?api_key=%s&guest_session_id=%s", apiUrl, id, apiKey, guestSessionId);
 

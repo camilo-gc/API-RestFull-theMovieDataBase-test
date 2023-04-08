@@ -9,13 +9,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class GuestSessionResponse {
+public class Session {
 
-
-    Boolean success;
-    String guest_session_id;
-    String expires_at;
-
-
+    private Boolean success;
+    private String guest_session_id;
+    private String expires_at;
 
 }

@@ -5,12 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class RatingRequest {
+public class ApiResponse {
 
-    private Integer value;
+    private String statusCode;
+    private String description;
+    private List<Object> content;
 
 }
