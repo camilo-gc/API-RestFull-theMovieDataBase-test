@@ -1,5 +1,8 @@
 package com.talataa.apirestfull.configurations;
 
+import com.fasterxml.classmate.ResolvedType;
+import com.talataa.apirestfull.models.ApiResponse;
+import com.talataa.apirestfull.models.Movie;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
