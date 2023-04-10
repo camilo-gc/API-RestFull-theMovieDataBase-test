@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 public class ApiResponse {
 
-    private String statusCode;
+    private String status_code;
     private String description;
     private List<Object> content;
 
