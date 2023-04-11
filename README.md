@@ -35,7 +35,7 @@ del JSON. Se debe enviar el id de la sesión activa en la variable **_guest_sess
 7. [**/movies/rated/{id}?guest_session_id=xxx**]() Se elimina la valoración de una película, se debe enviar el **_id_** 
 en la url y el id de la sesión activa como variable **_guest_session_id_** Ejemplo: 
 **_/movies/rated/2?guest_session_id=57fbc9e3eaf08cc424137e35a6909a3f_**
-8. **_/swagger-ui/_** Para visualizar la documentacion.
+8. [**_/swagger-ui/_**]() Para visualizar la documentacion.
 
 ## Contribuciones
 Se agradecen y se aceptan contribuciones. Para contribuir a la aplicación, sigue estos pasos:
